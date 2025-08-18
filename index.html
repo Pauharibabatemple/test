@@ -309,9 +309,11 @@
         <div class="form-step active" id="step1">
             <div class="options">
                 <input type="radio" id="individual" name="group" value="5" checked />
-                <label for="individual">Individual/Small Group (Max. 5)</label>
-                <input type="radio" id="school" name="group" value="50" />
-                <label for="school">School/College (Max. 50)</label>
+                <label for="individual">Individual / Family (Max. 5)</label>
+                <input type="radio" id="Group-Visit" name="group" value="50" />
+                <label for="Group-Visit">Group Visit (Max. 50)</label>
+                <input type="radio" id="school" name="group" value="100" />
+                <label for="school">School / College Visit (Max. 100)</label>
             </div>
             <div class="actions">
                 <button class="btn next" onclick="nextStep()">Next</button>
@@ -358,7 +360,7 @@
         <!-- Step 3: Visitors -->
         <div class="form-step" id="step3">
             <div class="visitor-row">
-                <span>Indian (Below 8 years)</span>
+                <span>Children (Under 8 years )</span>
                 <div class="counter">
                     <button onclick="changeCount('child',-1)">-</button>
                     <span id="child">0</span>
@@ -366,7 +368,7 @@
                 </div>
             </div>
             <div class="visitor-row">
-                <span>Indian (8 years and above)</span>
+                <span>Adults (8 years and above)</span>
                 <div class="counter">
                     <button onclick="changeCount('adult',-1)">-</button>
                     <span id="adult">0</span>
