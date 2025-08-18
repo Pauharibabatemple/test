@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Booking Form </title>
+    <title>Booking Form Wizard – 5 Steps</title>
     <style>
         * {
             box-sizing: border-box;
@@ -299,7 +299,7 @@
         <!-- Step progress -->
         <div class="steps">
             <div class="step active">1. Group</div>
-            <div class="step">2. Date</div>
+            <div class="step">2. Date </div>
             <div class="step">3. Visitors</div>
             <div class="step">4. Details</div>
             <div class="step">5. Review</div>
@@ -634,13 +634,59 @@
             document.getElementById('review-idType').innerText = formData.idType || '-';
         }
 
+        // function confirmBooking() {
+        //     // Placeholder for final submission API hook
+        //     alert('Booking confirmed!');
+        // }
+
+
         function confirmBooking() {
-            // Placeholder for final submission API hook
-            alert('Booking confirmed!');
-        }
+    // Gather all booking details
+    let data = {
+        access_key: "93d9a9c8-d91f-4c15-85da-052d291b7425", // Replace with your actual key
+        subject: "New Booking Form Submission",
+        from_name: formData.fullName,
+        email: formData.email,
+        message: "Booking Details SPBT",
+        group: document.querySelector('input[name="group"]:checked+label').innerText,
+        date: selectedDate,
+        time: selectedTime,
+        child: document.getElementById('child').innerText,
+        adult: document.getElementById('adult').innerText,
+        mobile: formData.mobile,
+        state: formData.state,
+        district: formData.district,
+        idType: formData.idType
+    };
+
+    // Convert to FormData for Web3Forms
+    let formDataObj = new FormData();
+    for (let key in data) {
+        formDataObj.append(key, data[key]);
+    }
+
+    // Send to Web3Forms
+    fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formDataObj
+    })
+        .then(response => response.json())
+        .then(result => {
+            if (result.success) {
+                alert("✅ Booking submitted successfully!");
+                // Optionally reset form
+                window.location.reload();
+            } else {
+                alert("❌ Failed to submit booking. Try again.");
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            alert("⚠️ Error submitting booking.");
+        });
+}
+
     </script>
 </body>
 
 </html>
-
-
