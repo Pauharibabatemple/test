@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Booking Form Wizard – 5 Steps</title>
+    <title>Booking Form Wizard – 4 Steps</title>
     <style>
         * {
             box-sizing: border-box;
@@ -213,7 +213,7 @@
             cursor: pointer;
         }
 
-        /* Step 4: User form */
+        /* Step 3: User form */
         .form-grid {
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -298,14 +298,13 @@
 
         <!-- Step progress -->
         <div class="steps">
-            <div class="step active">1. Group</div>
-            <div class="step">2. Date </div>
-            <div class="step">3. Visitors</div>
-            <div class="step">4. Details</div>
-            <div class="step">5. Review</div>
+            <div class="step active">1. Group & Date</div>
+            <div class="step">2. Visitors</div>
+            <div class="step">3. Details</div>
+            <div class="step">4. Review</div>
         </div>
 
-        <!-- Step 1: Group -->
+        <!-- Step 1: Group + Date & Time (merged) -->
         <div class="form-step active" id="step1">
             <div class="options">
                 <input type="radio" id="individual" name="group" value="5" checked />
@@ -315,19 +314,13 @@
                 <input type="radio" id="school" name="group" value="100" />
                 <label for="school">School / College Visit (Max. 100)</label>
             </div>
-            <div class="actions">
-                <button class="btn next" onclick="nextStep()">Next</button>
-            </div>
-        </div>
 
-        <!-- Step 2: Date & Time -->
-        <div class="form-step" id="step2">
             <div class="calendar-time">
                 <div class="calendar">
                     <header>
-                        <button id="prev">&#10094;</button>
+                        <button id="prev" aria-label="Previous Month">&#10094;</button>
                         <span id="monthYear"></span>
-                        <button id="next">&#10095;</button>
+                        <button id="next" aria-label="Next Month">&#10095;</button>
                     </header>
                     <table>
                         <thead>
@@ -357,10 +350,10 @@
             </div>
         </div>
 
-        <!-- Step 3: Visitors -->
-        <div class="form-step" id="step3">
+        <!-- Step 2: Visitors -->
+        <div class="form-step" id="step2">
             <div class="visitor-row">
-                <span>Children (Under 8 years )</span>
+                <span>Children (Under 8 years)</span>
                 <div class="counter">
                     <button onclick="changeCount('child',-1)">-</button>
                     <span id="child">0</span>
@@ -381,8 +374,8 @@
             </div>
         </div>
 
-        <!-- Step 4: Visitor Details Form -->
-        <div class="form-step" id="step4">
+        <!-- Step 3: Visitor Details Form -->
+        <div class="form-step" id="step3">
             <form id="userForm" onsubmit="event.preventDefault(); nextStep();">
                 <div class="form-grid">
                     <div class="field">
@@ -391,16 +384,13 @@
                     </div>
                     <div class="field">
                         <label for="mobile">Mobile Number</label>
-                        <input id="mobile" name="mobile" type="tel" placeholder="10-digit mobile" pattern="^[0-9]{10}$"
-                            required />
+                        <input id="mobile" name="mobile" type="tel" placeholder="10-digit mobile" pattern="^[0-9]{10}$" required />
                     </div>
                     <div class="field">
                         <label for="email">Email</label>
                         <input id="email" name="email" type="email" placeholder="you@example.com" required />
                     </div>
                     <div class="field">
-                        <!-- <label for="state">State</label>
-            <input id="state" name="state" type="text" placeholder="State" required /> -->
                         <label for="state">State</label>
                         <select id="state" name="state" required>
                             <option value="">-- Select State --</option>
@@ -432,19 +422,15 @@
                             <option value="Uttar Pradesh">Uttar Pradesh</option>
                             <option value="Uttarakhand">Uttarakhand</option>
                             <option value="West Bengal">West Bengal</option>
-                            <!-- Union Territories -->
                             <option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
                             <option value="Chandigarh">Chandigarh</option>
-                            <option value="Dadra and Nagar Haveli and Daman and Diu">Dadra and Nagar Haveli and Daman
-                                and Diu</option>
+                            <option value="Dadra and Nagar Haveli and Daman and Diu">Dadra and Nagar Haveli and Daman and Diu</option>
                             <option value="Delhi">Delhi</option>
                             <option value="Jammu and Kashmir">Jammu and Kashmir</option>
                             <option value="Ladakh">Ladakh</option>
                             <option value="Lakshadweep">Lakshadweep</option>
                             <option value="Puducherry">Puducherry</option>
                         </select>
-
-
                     </div>
                     <div class="field">
                         <label for="district">District</label>
@@ -467,8 +453,8 @@
             </form>
         </div>
 
-        <!-- Step 5: Review -->
-        <div class="form-step" id="step5">
+        <!-- Step 4: Review -->
+        <div class="form-step" id="step4">
             <h3>Review Your Booking</h3>
             <p><strong>Group Type:</strong> <span id="review-group"></span></p>
             <p><strong>Date:</strong> <span id="review-date"></span></p>
@@ -491,7 +477,7 @@
 
     <script>
         let currentStep = 1;
-        const TOTAL_STEPS = 5;
+        const TOTAL_STEPS = 4; // We now have 4 steps after merging Date/Time into Step 1
 
         // Simple in-memory model for details
         const formData = {
@@ -512,18 +498,18 @@
             });
             currentStep = step;
 
-            if (step === 5) updateReview();
+            if (step === 4) updateReview();
         }
 
         function nextStep() {
             // Gatekeeping per step
-            if (currentStep === 2) {
+            if (currentStep === 1) {
                 if (!selectedDate || !selectedTime) {
                     alert('Please select both date and time to proceed.');
                     return;
                 }
             }
-            if (currentStep === 4) {
+            if (currentStep === 3) {
                 const form = document.getElementById('userForm');
                 if (!form.reportValidity()) return;
                 // Persist inputs
@@ -544,7 +530,7 @@
         // Calendar
         const monthYear = document.getElementById('monthYear');
         const calendarBody = document.getElementById('calendar-body');
-        let currentDate = new Date();
+        let currentDateVar = new Date();
         const today = new Date(); today.setHours(0, 0, 0, 0);
         const maxDate = new Date(today); maxDate.setDate(today.getDate() + 15);
 
@@ -574,9 +560,9 @@
             calendarBody.appendChild(row);
         }
 
-        document.getElementById('prev').onclick = () => { currentDate.setMonth(currentDate.getMonth() - 1); renderCalendar(currentDate); };
-        document.getElementById('next').onclick = () => { currentDate.setMonth(currentDate.getMonth() + 1); renderCalendar(currentDate); };
-        renderCalendar(currentDate);
+        document.getElementById('prev').onclick = () => { currentDateVar.setMonth(currentDateVar.getMonth() - 1); renderCalendar(currentDateVar); };
+        document.getElementById('next').onclick = () => { currentDateVar.setMonth(currentDateVar.getMonth() + 1); renderCalendar(currentDateVar); };
+        renderCalendar(currentDateVar);
 
         // Time slots
         let selectedTime = "", selectedDate = "";
@@ -621,8 +607,8 @@
 
         // Review
         function updateReview() {
-            let group = document.querySelector('input[name="group"]:checked+label').innerText;
-            document.getElementById('review-group').innerText = group;
+            let groupLabel = document.querySelector('input[name="group"]:checked+label');
+            document.getElementById('review-group').innerText = groupLabel ? groupLabel.innerText : '-';
             document.getElementById('review-date').innerText = selectedDate || 'Not selected';
             document.getElementById('review-time').innerText = selectedTime || 'Not selected';
             document.getElementById('review-child').innerText = document.getElementById('child').innerText;
@@ -636,58 +622,50 @@
             document.getElementById('review-idType').innerText = formData.idType || '-';
         }
 
-        // function confirmBooking() {
-        //     // Placeholder for final submission API hook
-        //     alert('Booking confirmed!');
-        // }
-
-
         function confirmBooking() {
-    // Gather all booking details
-    let data = {
-        access_key: "93d9a9c8-d91f-4c15-85da-052d291b7425", // Replace with your actual key
-        subject: "New Booking Form Submission",
-        from_name: formData.fullName,
-        email: formData.email,
-        message: "Booking Details SPBT",
-        group: document.querySelector('input[name="group"]:checked+label').innerText,
-        date: selectedDate,
-        time: selectedTime,
-        child: document.getElementById('child').innerText,
-        adult: document.getElementById('adult').innerText,
-        mobile: formData.mobile,
-        state: formData.state,
-        district: formData.district,
-        idType: formData.idType
-    };
+            // Gather all booking details
+            let data = {
+                access_key: "93d9a9c8-d91f-4c15-85da-052d291b7425", // Replace with your actual key
+                subject: "New Booking Form Submission",
+                from_name: formData.fullName,
+                email: formData.email,
+                message: "Booking Details SPBT",
+                group: (document.querySelector('input[name="group"]:checked+label') || {}).innerText || '',
+                date: selectedDate,
+                time: selectedTime,
+                child: document.getElementById('child').innerText,
+                adult: document.getElementById('adult').innerText,
+                mobile: formData.mobile,
+                state: formData.state,
+                district: formData.district,
+                idType: formData.idType
+            };
 
-    // Convert to FormData for Web3Forms
-    let formDataObj = new FormData();
-    for (let key in data) {
-        formDataObj.append(key, data[key]);
-    }
-
-    // Send to Web3Forms
-    fetch("https://api.web3forms.com/submit", {
-        method: "POST",
-        body: formDataObj
-    })
-        .then(response => response.json())
-        .then(result => {
-            if (result.success) {
-                alert("✅ Booking submitted successfully!");
-                // Optionally reset form
-                window.location.reload();
-            } else {
-                alert("❌ Failed to submit booking. Try again.");
+            // Convert to FormData for Web3Forms
+            let formDataObj = new FormData();
+            for (let key in data) {
+                formDataObj.append(key, data[key]);
             }
-        })
-        .catch(error => {
-            console.error("Error:", error);
-            alert("⚠️ Error submitting booking.");
-        });
-}
 
+            // Send to Web3Forms
+            fetch("https://api.web3forms.com/submit", {
+                method: "POST",
+                body: formDataObj
+            })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.success) {
+                        alert("✅ Booking submitted successfully!");
+                        window.location.reload();
+                    } else {
+                        alert("❌ Failed to submit booking. Try again.");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    alert("⚠️ Error submitting booking.");
+                });
+        }
     </script>
 </body>
 
